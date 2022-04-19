@@ -2,19 +2,19 @@ const con = require('./conexao');
 const jwt = require('jsonwebtoken')
 
 
-const createAluno = (request, response) => {
-    const { id, nome, curso } = request.body
+const createAssunto = (request, response) => {
+    const { id, nome, grauDificuldade, tempoNecessario } = request.body
 
-    con.query('INSERT INTO alunos (id, nome, curso) VALUES ($1, $2, $3)', [id, nome, curso], (error, result) => {
+    con.query('INSERT INTO assuntos (id, nome, grauDificuldade, tempoNecessario) VALUES ($1, $2, $3, $4)', [id, nome, grauDificuldade, tempoNecessario], (error, result) => {
         if (error) {
-            throw error
+            console.log("Ocorreu um erro ao criar assunto")
         }
-        response.status(201).send(`Aluno criado com sucesso.`)
+        response.status(201).send('Assunto criado com sucesso.')
     })
 }
 
-const getAlunos = (request, response) => {
-    con.query('SELECT * FROM alunos ORDER BY id ASC', (error, results) => {
+const getAssuntos = (request, response) => {
+    con.query('SELECT * FROM assuntos ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -22,7 +22,18 @@ const getAlunos = (request, response) => {
     })
 }
 
-const updateAluno = (request, response) => {
+const getAssuntoById = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    con.query('SELECT * FROM assuntos WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const updateAssunto = (request, response) => {
     const iden = parseInt(request.params.id)
     const { id, nome, curso } = request.body
 
@@ -38,7 +49,7 @@ const updateAluno = (request, response) => {
     )
 }
 
-const deleteAluno = (request, response) => {
+const deleteAssunto = (request, response) => {
     const id = parseInt(request.params.id)
 
     con.query('DELETE FROM alunos WHERE id = $1', [id], (error, result) => {
@@ -47,4 +58,15 @@ const deleteAluno = (request, response) => {
         }
         response.status(200).send(`Aluno removido com sucesso com o identificador: ${id}`)
     })
+}
+
+
+module.exports = {
+
+    getAssuntos,
+    getAssuntoById,
+    createAssunto,
+    updateAssunto,
+    deleteAssunto,
+
 }

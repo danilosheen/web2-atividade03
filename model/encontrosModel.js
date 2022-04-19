@@ -48,3 +48,13 @@ const deleteAluno = (request, response) => {
         response.status(200).send(`Aluno removido com sucesso com o identificador: ${id}`)
     })
 }
+
+module.exports = {
+
+    getAlunos,
+    getAlunoById,
+    createAluno,
+    updateAluno,
+    deleteAluno,
+
+}
