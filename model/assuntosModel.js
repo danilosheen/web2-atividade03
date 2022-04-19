@@ -1,6 +1,31 @@
 const con = require('./conexao');
 const jwt = require('jsonwebtoken')
 
+const login = (request, response) => {
+    if (request.body.user === process.env.USUARIO && request.body.pass === process.env.SENHA) {
+        const id = 1;
+        var token = jwt.sign({ id }, process.env.APP_KEY, { expiresIn: 100000 });
+        response.set("x-access-token", token);
+        response.json({ auth: true, token: token });
+    } else {
+        response.status(500).json({ mensagem: 'Login Inválido' });
+    }
+}
+
+function verifyJWT (request, response, next){
+    let token = request.headers['x-access-token'];
+    if (!token){
+        return response.status(401).json({ auth: false, mensagem: 'Sem token de verificação'});
+
+    }
+
+    jwt.verify(token, process.env.APP_KEY, function(error, decoded){
+        if (error){
+            return response.status(500).json({ mensagem: 'Token inválido'});
+        }
+        next();
+    });
+}
 
 const createAssunto = (request, response) => {
     const { id, nome, grauDificuldade, tempoNecessario } = request.body
@@ -63,6 +88,8 @@ const deleteAssunto = (request, response) => {
 
 module.exports = {
 
+    login,
+    verifyJWT,
     getAssuntos,
     getAssuntoById,
     createAssunto,
