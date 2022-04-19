@@ -13,7 +13,6 @@ app.post('/alunos', modelAluno.verifyJWT, modelAluno.createAluno)
 app.put('/alunos/:id', modelAluno.verifyJWT, modelAluno.updateAluno)
 app.delete('/alunos/:id', modelAluno.verifyJWT, modelAluno.deleteAluno)
 
-app.post('/login', modelAssuntos.login)
 app.get('/assuntos', modelAssuntos.getAssuntos)
 app.get('/assuntos/:id', modelAssuntos.getAssuntoById)
 app.post('/assuntos', modelAssuntos.verifyJWT, modelAssuntos.createAssunto)
