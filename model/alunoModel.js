@@ -48,9 +48,9 @@ const getAlunoById = (request, response) => {
 }
 
 const createAluno = (request, response) => {
-    const { id, nome, curso } = request.body
+    const { id, nome, telefone } = request.body
 
-    con.query('INSERT INTO alunos (id, nome, curso) VALUES ($1, $2, $3)', [id, nome, curso], (error, result) => {
+    con.query('INSERT INTO alunos (id, nome, telefone) VALUES ($1, $2, $3)', [id, nome, telefone], (error, result) => {
         if (error) {
             throw error
         }

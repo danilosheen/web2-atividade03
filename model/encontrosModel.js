@@ -1,20 +1,19 @@
 const con = require('./conexao');
-const jwt = require('jsonwebtoken')
 
 
-const createAluno = (request, response) => {
-    const { id, nome, curso } = request.body
+const createEncontro = (request, response) => {
+    const { qtdAlunos, data, assunto } = request.body
 
-    con.query('INSERT INTO alunos (id, nome, curso) VALUES ($1, $2, $3)', [id, nome, curso], (error, result) => {
+    con.query('INSERT INTO encontros (qtdAlunos, data, assunto) VALUES ($1, $2, $3)', [qtdAlunos, data, assunto], (error, result) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`Aluno criado com sucesso.`)
+        response.status(201).send(`Encontro criado com sucesso.`)
     })
 }
 
-const getAlunos = (request, response) => {
-    con.query('SELECT * FROM alunos ORDER BY id ASC', (error, results) => {
+const getEncontros = (request, response) => {
+    con.query('SELECT * FROM encontros', (error, results) => {
         if (error) {
             throw error
         }
@@ -22,39 +21,39 @@ const getAlunos = (request, response) => {
     })
 }
 
-const updateAluno = (request, response) => {
-    const iden = parseInt(request.params.id)
-    const { id, nome, curso } = request.body
+const updateEncontro = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { qtdAlunos, data, assunto } = request.body
 
     con.query(
-        'UPDATE alunos SET id = $1, nome = $2, curso = $3 WHERE id = $4',
-        [id, nome, curso, iden],
+        'UPDATE encontros SET qtdAlunos = $1, data = $2, assunto = $3 WHERE id = $4',
+        [qtdAlunos, data, assunto, id],
         (error, result) => {
             if (error) {
                 throw error
             }
-            response.status(200).send(`Aluno ${iden} atualizado com sucesso.`)
+            response.status(200).send(`Encontro com o id ${id} atualizado com sucesso.`)
         }
     )
 }
 
-const deleteAluno = (request, response) => {
+const deleteEncontro = (request, response) => {
     const id = parseInt(request.params.id)
 
-    con.query('DELETE FROM alunos WHERE id = $1', [id], (error, result) => {
+    con.query('DELETE FROM encontros WHERE id = $1', [id], (error, result) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`Aluno removido com sucesso com o identificador: ${id}`)
+        response.status(200).send(`Encontro removido com sucesso com o identificador: ${id}`)
     })
 }
 
 module.exports = {
 
-    getAlunos,
-    getAlunoById,
-    createAluno,
-    updateAluno,
-    deleteAluno,
+    getEncontros,
+    createEncontro,
+    updateEncontro,
+    deleteEncontro,
+
 
 }
