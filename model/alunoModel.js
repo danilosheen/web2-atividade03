@@ -30,7 +30,7 @@ function verifyJWT (request, response, next){
 const getAlunos = (request, response) => {
     con.query('SELECT * FROM alunos ORDER BY id ASC', (error, results) => {
         if (error) {
-            throw error
+            return response.status(500).json({ mensagem: 'Erro ao listar alunos'});
         }
         response.status(200).json(results.rows)
     })
@@ -41,7 +41,7 @@ const getAlunoById = (request, response) => {
 
     con.query('SELECT * FROM alunos WHERE id = $1', [id], (error, results) => {
         if (error) {
-            throw error
+            return response.status(500).json({ mensagem: 'Erro ao listar aluno pelo ID'});
         }
         response.status(200).json(results.rows)
     })
@@ -52,9 +52,9 @@ const createAluno = (request, response) => {
 
     con.query('INSERT INTO alunos (id, nome, telefone) VALUES ($1, $2, $3)', [id, nome, telefone], (error, result) => {
         if (error) {
-            throw error
+            return response.status(500).json({ mensagem: 'Erro ao criar aluno'});
         }
-        response.status(201).send(`Aluno criado com sucesso.`)
+        response.status(201).json({mensagem: 'Aluno criado com sucesso.'})
     })
 }
 
@@ -67,9 +67,9 @@ const updateAluno = (request, response) => {
         [id, nome, curso, iden],
         (error, result) => {
             if (error) {
-                throw error
+                return response.status(500).json({ mensagem: 'Erro ao atualizar aluno'});
             }
-            response.status(200).send(`Aluno ${iden} atualizado com sucesso.`)
+            response.status(200).json({mensagem: 'Aluno atualizado com sucesso.'})
         }
     )
 }
@@ -81,7 +81,7 @@ const deleteAluno = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`Aluno removido com sucesso com o identificador: ${id}`)
+        response.status(200).json('Aluno removido com sucesso')
     })
 }
 
